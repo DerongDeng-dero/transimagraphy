@@ -1,4 +1,4 @@
-# Transimagraphy
+# 拾光翰墨--Transimagraphy
 
 拾光翰墨是一款我们绘辞科技团队打造的基于图像识别技术和通用人工智能技术的商品描述自动生成大模型web端与app平台。
 
