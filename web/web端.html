@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="UTF-8" />
+    <title>商品图片自动识别模型平台</title>
+<head\>
+
+<script type="text/javascript" src="js/jquery-3.6.3.min.js"></script>
+<script type="text/javascript" src="js/material.js"></script>
+<script type="text/javascript" src="js/dialog-polyfill.js"></script>
+<script type="module" src="js/cropper.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/material.css">
+<link rel="stylesheet" type="text/css" href="css/cropper.css">
+<link rel="stylesheet" type="text/css" href="css/material_icons.css">
+<link rel="stylesheet" type="text/css" href="css/dialog-polyfill.css">
+
+    <link rel="icon" type="image/jp" href="011.jpg">
+    <style>
+
+.header
+        {
+    display: flex;
+    justify-content: space-between;  /* 分别对齐 */
+    align-items: center;  /* 垂直居中 */
+        }
+
+
+body 
+{
+  background-image:url('2.gif');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+
+
+        h1{
+            color:rgb(179, 215, 239) ;
+        } 
+        .page {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            border-style: double;
+            border-color:rgb(57, 66, 225) ;/* 边框设计 */
+        
+        }
+        .content {
+            display: flex;
+            flex: 1;
+        } 
+        .header1{
+        /*     background-color: #f8f9fa; */
+            text-align: center;
+            padding: 20px;
+            border-style: double;
+            border-color:rgb(57, 125, 241) ;/* 边框设计 */
+        }
+        .aside {
+            flex: 1;
+            padding: 20px;
+            border-style: double;
+            border-color:rgb(57, 167,241) ;/* 边框设计 */
+        }
+        .main {
+            flex: 8;
+            padding: 20px;
+           /*  background-color: #e9ecef; */
+            border-style: double;
+            border-color:rgb(57, 155, 241) ;/* 边框设计 */
+        }   
+        ul {
+            list-style-type: none;
+            padding: 0;
+            background-color:num;
+        }
+
+        ul li {
+            margin: 50px 0;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            padding: 10px 15px;
+            background-color: rgb(128, 198, 245); /* Change this to your desired color */
+            border-radius: 5px;
+            display: block;
+            transition: background-color 0.3s; /* 按钮属性设计 */
+        }
+
+        ul li a:hover {
+            background-color: #45a049; /* Change this to your desired hover color */
+        }
+        .result {
+            display: none;
+            color: rgb(57, 167, 241);
+            font-size: 120%;
+            text-align: right;
+        }
+
+    .demo-card-wide > .mdl-card__title {
+        color: #0f7be8;
+    }
+
+    .demo-card-wide > .mdl-card__menu {
+        color: #2772bd;
+    }
+
+    .flex-container {
+        display: flex;
+        flex-wrap: wrap;
+        background-color: rgb(35, 141, 198);
+    }
+
+    .flex-container > div {
+        background-color: #71b2f3;
+        width: 100px;
+        height: 100px;
+        margin: 4px;
+        text-align: center;
+        line-height: 100px;
+        font-size: 30px;
+    }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          // 此代码将在页面加载完成后执行
+          showContent('content0');
+        });//显示刚进入网站时的样子
+    </script>
+    <div class="fresh"></div>
+    <nav class="fresh-1">
+        <meta charset="UTF-8" />
+        <a class="fresh__link" href="" style="color: rgb(252, 157, 47); font-size: 120%;"> 刷新</a>
+    </nav>
+</head>
+
+<body>
+    <h1 class="header">拾光翰墨--商品描述自动生成模型平台
+        <img src="3.png" width="25%">
+    </h1>
+    <p style="color: rgb(255, 255, 255); font-size: 120%;">>>>>>>>>>>随着电子商务行业的不断发展，越来越多的用户选择在线上进行购物。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">>>>>>>>>>>作为吸引消费者的重要因素之一，关于商品描述的文案的质量优劣是决定用户下单意愿的实在原因。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">随着电商平台体量增大，必然会面临需要更快、更优质的内容以实现电商转化率地提升。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">>>>>>>>>>>早期由人工生成的内容可被归类为达人内容生成，其天然存在覆盖商品量少、成本高、素材产出率低、资料搜集时间长、需要内容审核修订的问题。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">与之相对应的是近几年兴起的智能内容生成，通过训练机器模型，智能生成商品的文本描述。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">从成本和效率的角度出发，智能生成具有可批量化生成内容和低成本的优势。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">>>>>>>>>>>此外，受益于各电商平台积累的海量静态和行为数据，机器模型可以对商品有更深的理解。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">生成的内容可以有远超达人的信息量，并且全面、精准和即时的感知商品信息和流行趋势变化。
+        <p style="color: rgb(229, 185, 81); font-size: 190%;">>>>>>>>>>>拾光翰墨--商品描述自动生成模型平台
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">即为一款我们绘辞科技团队打造的基于图像识别技术和通用人工智能技术的商品描述自动生成机器人web端与app平台。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">“拾光”寓意着捕捉、获取光亮，代表了产品的核心特点
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">————通过图像识别技术和通用人工智能技术，将商品图片转化为商品文字描述，提升电商体验和效率，让用户更快地了解商品特点，更准确地做出购买决策。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">>>>>>>>>>>而“翰墨”则是指写作和艺术创作领域中常用的词汇，代表着文化和创意的含义，为用户生成精美的商品描述。
+        <p style="color: rgb(255, 255, 255); font-size: 120%;">>>>>>>>>>>拾光翰墨”还意味着捡拾光明和智慧的精神，表达了希望产品能够具有启迪智慧、开拓视野的意愿，为用户进行商品文案撰写时提供丰富思路。
+    </p>
+    <hr>
+    <!-- <form action="/action_page.php">
+        <label for="img" style="color: red;">选择图片:</label>
+        <input type="file" id="img" name="img" accept="image/*" style="display: none;" onchange="updateLabel()">
+        <label for="img" style="padding: 10px; background-color: #4CAF50; color: white; cursor: pointer;">上传图片</label>
+        <span id="selected-filename"></span>
+        <input type="submit">
+      </form> -->
+        <div class="page">
+          <header class="header1">
+          <h2 style="color:rgb(238, 228, 165);">商品图片识别平台管理系统 </h2>
+          </header>
+          <div class="content">
+              <aside class="aside">
+                <h3 style="color:rgb(239, 239, 239);text-align: left;">目录</h3>
+                <ul>
+                  <li><a href="#" onclick="showContent('content1'); return false;">关于</a></li>
+                  <li><a href="#" onclick="showContent('content2'); return false;">我们的核心技术</a></li>
+                  <li><a href="#" onclick="showContent('content3'); return false;">了解财务分析</a></li> <!-- 编辑按钮 -->
+                  <li><a href="#" onclick="showContent('content4'); return false;">开始图片识别！</a></li> <!-- 编辑按钮 -->
+                </ul>
+                  
+              </aside>
+                <main class="main">
+                  <!-- <h3 style="color:red;">Sidebar </h3> -->
+                  <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel erat nulla. Quisque sed elit nisl.</p> -->
+                  <main id="main" class="main">
+                    <div id="content0" style="display: none;">
+                        <h3 style="color:rgb(241, 137, 57); text-align: center; font-size: 200%;">**********欢迎**********</h3>
+                        <p style="color: rgb(255, 255, 255); font-size: 120%;text-align:right">欢迎来到商品描述生成模型系统！</p>
+                    </div>
+                    <div id="content1" style="display: none;">
+                        <p style="color: rgb(57, 167, 241); font-size: 120%;text-align:left">背景信息如下：</p> 
+                        <h3 style="color:rgb(57, 167, 241); text-align: center; font-size: 150%;">背景信息</h3>
+                        <img src="5.png" style="display: block; margin: auto;" width=auto> <!-- 选项的内容 -->
+                    </div>
+                    <div id="content2" style="display: none;">
+                        <p style="color: rgb(57, 167, 241); font-size: 120%;text-align:left">核心技术如下</p> <!-- 选项的内容 -->
+                        <h3 style="color:rgb(57, 167, 241); text-align: center; font-size: 150%;">核心技术</h3>
+                        <img src="4.png" style="display: block; margin: auto;" width="90%">
+                    </div>
+                    <div id="content3" style="display: none;">
+                        <p style="color: rgb(57, 167, 241); font-size: 120%;text-align:left">财务分析如下</p>
+                        <h3 style="color:rgb(57, 167, 241); text-align: center; font-size: 150%;">财务分析</h3>
+                        <div style="display: flex; justify-content: space-around;">
+                            <img src="7.png" style="width: 45%; margin-right: 2%;">
+                            <img src="8.png" style="width: 45%; margin-left: 2%;">
+                        </div>
+                    </div>                  
+                    <div id="content4" style="display: none;">
+                        <h3 style="color:rgb(57, 167, 241);">图片识别</h3>
+                        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header is-small-screen">
+                            <!--<header class="mdl-layout__header">!-->
+                            </header>
+                            <main class="mdl-layout__content">
+                                <div class="page-content">
+                                    <section id="section_input" style="text-align: left;">
+                                        <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="margin: auto; min-height: 100px;">
+                                            <div class="mdl-card__title mdl-card--expand mdl-card--border">
+                                                <table>
+                                                    <tr>
+                                                        <td style="width: 100%; text-align: center">
+                                                            <h3 class="mdl-card__title-text" style="color: rgb(0, 0, 0)">选择一张图片</h3>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div id="gallery" class="flex-container">
+                        
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                        
+                                                <br>
+                                            </div>
+                                            <div class="mdl-card__supporting-text mdl-card--border" style="text-align: center;">
+                                                <h5 style="display: inline-block">或</h5>
+                                                <a style="display: inline-block" onclick="showDialog()"><h5>上传图片</h5></a>
+                                            </div>
+                                        </div>
+                                    </section>
+                        
+                                    <div class="mdl-grid" style="width:90%; text-align: center; display: none" id="section_content">
+                                        <div class="mdl-cell mdl-cell--3-col mdl-shadow--2dp">
+                                            <img style="max-width: 100%; max-height: 70vh;" id="image_display">
+                                            <button class="mdl-button mdl-js-button mdl-button--raised" style="display:none; margin: 8px" onclick="showDialog()">
+                                                重新上传
+                                            </button>
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--6-col mdl-card mdl-shadow--2dp " >
+                                            <div class="mdl-card__supporting-text mdl-card--border">
+                                                <div id="label_list">
+                                                <!-- show labels here -->
+                                                </div>
+                                                <table style="width: 100%">
+                                                    <tr id="progress_label">
+                                                        <td colspan="2">
+                                                            正在检索标签...
+                                                            <div style="width: 100%" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="show_label">
+                                                        <td>
+                                                            <div style="width: 70%;"
+                                                                 class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                                                <input style="display: block" class="mdl-textfield__input" type="text" id="label_input"
+                                                                       style="width: 300px;">
+                                                                <label class="mdl-textfield__label" for="label_input">输入标签...</label>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button class="mdl-button mdl-js-button mdl-button--raised" onclick="addLabel()">
+                                                                添加标签
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div id="progress_caption" class="mdl-card__supporting-text" style="text-align: left">
+                                                <div style="text-align: center;">
+                                                    正在生成句子...
+                                                    <div style="width: 100%" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+                                                </div>
+                                            </div>
+                                            <div id="show_caption" class="mdl-card__supporting-text" style="text-align: center">
+                                                <h5 style="margin-top: 2px">描述：<font id="text_caption"></font></h5>
+                                                <button class="mdl-button mdl-js-button mdl-button--raised" onclick="showCaption()">
+                                                    重新生成
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        
+                            <!-- dialog -->
+                            <dialog class="mdl-dialog" style="padding: 8px; max-height: 90vh">
+                                <h4 class="mdl-dialog__title" style="font-size: 32px; padding-left: 0px; padding-right: 0px">上传图片</h4>
+                                <div class="mdl-dialog__content" style="padding-left: 0px; padding-right: 0px; padding-bottom: 0px">
+                                    <form enctype="multipart/form-data">
+                                        <input type="file" name="upload_image" id="file_upload_image" accept="image/png, image/jpeg"
+                                               onchange="handleUploadImage()">
+                                    </form>
+                                    <div id="cropper-container">
+                                        <img id="image">
+                                    </div>
+                                </div>
+                                <div class="mdl-dialog__actions">
+                                    <button type="button" class="mdl-button mdl-button--accent" onclick="uploadCroppedImage()">上传</button>
+                                    <button type="button" class="mdl-button close mdl-button--colored">取消</button>
+                                </div>
+                            </dialog>
+                        
+                            <!-- snackbar -->
+                            <div id="demo-snackbar-example" class="mdl-js-snackbar mdl-snackbar">
+                                <div class="mdl-snackbar__text"></div>
+                                <button class="mdl-snackbar__action" type="button"></button>
+                            </div>
+                        
+                            <!-- dialog and snackbar and gallery -->
+                            <script>
+                                var dialog = document.querySelector('dialog');
+                                if (!dialog.showModal) {
+                                    dialogPolyfill.registerDialog(dialog);
+                                }
+                        
+                                function showDialog() {
+                                    dialog.showModal();
+                                    cropper = module.initCropper(document.getElementById("image"));
+                                }
+                        
+                                dialog.querySelector('.close').addEventListener('click', function () {
+                                    dialog.close();
+                                });
+                        
+                                function showSnackbar(text, timeout = 1500) {
+                                    // 'use strict';
+                                    var handler = function () {
+                                        console.log('snackbar action handler');
+                                    }
+                                    var snackbarContainer = document.querySelector('#demo-snackbar-example');
+                        
+                                    var data = {
+                                        message: text,
+                                        timeout: timeout,
+                                        actionHandler: handler,
+                                        actionText: 'Undo'
+                                    };
+                                    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+                                }
+                        
+                                $(document).ready(function() {
+                                    showGallery();
+                                })
+                        
+                                function showGallery() {
+                                    $.get('/get_gallery', function (data){
+                                        var image_list = JSON.parse(data);
+                                        var gallery = document.getElementById("gallery");
+                                        gallery.innerHTML = "";
+                                        for (var i = 0; i < image_list.length; i++) {
+                                            gallery.innerHTML += "<div><img onclick=showGalleryImage(\"" + image_list[i] + "\") " +
+                                                "height='100' width='100' src='" + image_list[i] + "'></div>"
+                                        }
+                                    })
+                                }
+                            </script>
+                        
+                            <!-- image upload -->
+                            <script>
+                                const module = {};
+                                const state = {};
+                        
+                                function handleUploadImage() {
+                                    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+                                        alert('The File APIs are not fully supported in this browser.');
+                                        return;
+                                    }
+                        
+                                    var input = document.getElementById('file_upload_image');
+                                    if (!input) {
+                                        alert("Um, couldn't find the fileinput element.");
+                                    } else if (!input.files) {
+                                        alert("This browser doesn't seem to support the `files` property of file inputs.");
+                                    } else if (!input.files[0]) {
+                                        alert("Please select a file before clicking 'Load'");
+                                    } else {
+                                        var file = input.files[0];
+                                        var fileReader = new FileReader();
+                                        //fileReader.readAsText(file);
+                                        // fileReader.readAsBinaryString(file);
+                                        fileReader.readAsDataURL(file);
+                        
+                                        fileReader.onload = function (e) {
+                                            result = fileReader.result;
+                                            cropper.replace(result);
+                                        }
+                                    }
+                                }
+                        
+                                function b64toBlob(dataURL) {
+                                    var BASE64_MARKER = ';base64,';
+                                    if (dataURL.indexOf(BASE64_MARKER) == -1) {
+                                        var parts = dataURL.split(',');
+                                        var contentType = parts[0].split(':')[1];
+                                        var raw = decodeURIComponent(parts[1]);
+                                        return new Blob([raw], {type: contentType});
+                                    }
+                                    var parts = dataURL.split(BASE64_MARKER);
+                                    var contentType = parts[0].split(':')[1];
+                                    var raw = window.atob(parts[1]);
+                                    var rawLength = raw.length;
+                        
+                                    var uInt8Array = new Uint8Array(rawLength);
+                        
+                                    for (var i = 0; i < rawLength; ++i) {
+                                        uInt8Array[i] = raw.charCodeAt(i);
+                                    }
+                        
+                                    return new Blob([uInt8Array], {type: contentType});
+                                }
+                        
+                                function uploadCroppedImage() {
+                                    var canvas = cropper.getCroppedCanvas();
+                                    var blob = b64toBlob(canvas.toDataURL('image/jpeg', 1.0));      // quality = 1.0
+                        
+                                    var formData = new FormData();
+                                    formData.append('upload_image', blob, 'crop.jpg');
+                        
+                                    $.ajax({
+                                        url: '/upload',
+                                        type: 'POST',
+                                        data: formData,
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        complete: function (data) {
+                                            console.log('complete');
+                                            var filename = data.responseText;
+                                            state.image_filename = filename;
+                                            state.image_url = 'upload/' + filename;
+                                            console.log('saved filename:', filename);
+                                            dialog.close();
+                                            showUploadedImage();
+                                        }
+                                    });
+                                }
+                            </script>
+                        
+                            <!-- import cropper -->
+                            <script type="module">
+                                import {initCropper, getCropper} from './js/main.js';
+                        
+                                module.initCropper = initCropper;
+                                module.getCropper = getCropper;
+                            </script>
+                        
+                            <!-- show image -->
+                            <script>
+                                function showGalleryImage(image_url) {
+                                    state.image_url = image_url;
+                                    state.image_filename = '1';
+                                    showUploadedImage();
+                                }
+                        
+                                function showUploadedImage() {
+                                    document.getElementById("section_content").style.display = 'flex';
+                        
+                                    document.getElementById("section_input").style.display = 'none';
+                                    document.getElementById("image_display").src = state.image_url;
+                        
+                                    document.getElementById("progress_label").style.display = 'table-row';
+                                    document.getElementById("show_label").style.display = 'none';
+                        
+                                    $.get('get_labels', {'image_url': state.image_url}, function (data) {
+                                        ret = JSON.parse(data);
+                                        labels = ret[0];
+                                        scores = ret[1];
+                                        state.labels = labels;
+                                        state.scores = scores;
+                        
+                                        document.getElementById("progress_label").style.display = 'none';
+                                        document.getElementById("show_label").style.display = 'table-row';
+                                        showLabels();
+                                        showCaption();
+                                    });
+                                }
+                        
+                                function showCaption() {
+                                    document.getElementById("progress_caption").style.display = 'block';
+                                    document.getElementById("show_caption").style.display = 'none';
+                                    if (state.labels.length < 5) {
+                                        alert("请使用至少5个标签");
+                                        return;
+                                    }
+                                    $.get('get_caption', {
+                                        'image_url': state.image_url,
+                                        'labels': JSON.stringify(state.labels)
+                                    }, function (data) {
+                                        ret = JSON.parse(data);
+                                        console.log(ret.caption);
+                                        document.getElementById("text_caption").innerHTML = ret.caption;
+                                        document.getElementById("progress_caption").style.display = 'none';
+                                        document.getElementById("show_caption").style.display = 'block';
+                                    })
+                                }
+                        
+                                function showLabels() {
+                                    var labels = state.labels;
+                                    var list = document.getElementById("label_list");
+                        
+                                    list.innerHTML = "";
+                                    for (var i = 0; i < labels.length; i++) {
+                                        list.innerHTML += "<span class=\"mdl-chip mdl-chip--deletable\" id=\"label_" + i + "\">" +
+                                            "<span class=\"mdl-chip__text\">" + labels[i] + "</span>" +
+                                            "<button type=\"button\" class=\"mdl-chip__action\" onclick=\"deleteLabel(" + i + ")\"><i class=\"material-icons\">X</i></button>" +
+                                            "</span>"
+                                    }
+                                }
+                        
+                                function addLabel() {
+                                    var label = document.getElementById("label_input").value.trim();
+                                    if (label.length == 0) {
+                                        return;
+                                    }
+                                    for (var i = 0; i < state.labels.length; i++) {
+                                        if (label == state.labels[i]) {
+                                            showSnackbar('标签重复：' + label);
+                                            return;
+                                        }
+                                    }
+                        
+                                    state.labels.push(label);
+                                    showLabels();
+                                    document.getElementById("label_input").value = "";
+                                }
+                        
+                                function deleteLabel(index) {
+                                    state.labels.splice(index, 1);
+                                    showLabels();
+                                }
+                            </script>
+                        </div>
+                        <p class="result" id="result-text"></p> <!-- 显示识别结果 -->
+                    </div>
+              </main>
+              
+          </div>
+      </div>
+</body>
+<script>
+     alert ('欢迎进入商品图片识别平台！')
+     this.$alert('这是一段内容', '标题名称', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+        }
+    });
+    function showContent(id) {
+  // 首先，隐藏所有内容
+  var contents = document.getElementById('main').children;
+  for (var i = 0; i < contents.length; i++) {
+    contents[i].style.display = 'none';
+  }
+  // 然后，显示点击的内容
+  document.getElementById(id).style.display = 'block';
+}
+
+// 当页面加载完成后，显示默认的欢迎内容
+window.onload = function() {
+  showContent('content0');
+}
+
+    function updateLabel() {
+            var input = document.getElementById('img');
+            var filenameLabel = document.getElementById('selected-filename');
+            filenameLabel.textContent = '';
+            if(input.files.length > 0) {
+                filenameLabel.textContent = input.files[0].name;
+            }
+        }
+        function uploadImage(event) {
+    event.preventDefault();
+
+    var input = document.getElementById('img');
+    if (input.files.length > 0) {
+        var data = new FormData();
+        data.append('img', input.files[0]);
+
+        fetch('/upload', {
+            method: 'POST',
+            body: data
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result-text').textContent = data.result;
+            document.getElementById('content4').classList.add('result');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+</script>
+
+</html>
